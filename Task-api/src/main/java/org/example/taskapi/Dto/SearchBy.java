@@ -1,0 +1,19 @@
+package org.example.taskapi.Dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class SearchBy {
+    public enum SearchByField {
+        PROJECT,
+        ASSIGNEE
+    }
+    
+    private SearchByField field;
+    private String value;
+    
+}
