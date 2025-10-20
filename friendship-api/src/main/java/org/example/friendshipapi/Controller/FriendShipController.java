@@ -34,8 +34,8 @@ public class FriendShipController {
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping("/FriendshipsRequest")
-    public ResponseEntity<List<FriendshipRequest>> FriendshipsRequest(@RequestBody String username){
+    @GetMapping("/FriendshipsRequests/{username}")
+    public ResponseEntity<List<FriendshipRequest>> FriendshipsRequest(@PathVariable String username){
         Optional<List<FriendshipRequest>> requestList=  friendshipRequestService.friendshipRequestList(username);
         if(requestList.isPresent()){
             return ResponseEntity.ok(requestList.get());
@@ -56,8 +56,8 @@ public class FriendShipController {
 
 
 
-    @GetMapping("/allFriends")
-    public ResponseEntity<List<String>> seacrhFriend(@RequestBody String username){
+    @GetMapping("/allFriends/{username}")
+    public ResponseEntity<List<String>> seacrhFriend(@PathVariable String username){
         return ResponseEntity.ok(friendshipService.getFriends(username));
 
 

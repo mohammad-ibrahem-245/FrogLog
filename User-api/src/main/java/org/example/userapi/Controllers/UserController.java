@@ -18,8 +18,8 @@ public class UserController {
 
 
 
-    @GetMapping("/Search")
-    public ResponseEntity<SiteUser> search(@RequestBody(required = true) String username){
+    @GetMapping("/Search/{username}")
+    public ResponseEntity<SiteUser> search(@PathVariable String username){
        Optional<SiteUser> user = userService.findUser(username);
         if(user.isPresent()){
             return ResponseEntity.ok(user.get());
@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/save")
+    @PostMapping("/add")
     public ResponseEntity save(@RequestBody SiteUser user) throws InterruptedException {
         userService.saveUser(user);
 
@@ -49,17 +49,17 @@ public class UserController {
     }
 
 
-    @PostMapping("/update")
+    @PostMapping("/update/")
     public ResponseEntity update(@RequestBody SiteUser user){
         userService.updateUser(user);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity delete(@RequestBody String user ){
-        userService.deleteUser(userService.findUser(user).get());
+    @PostMapping("/deleteMyAccount/{username}")
+    public ResponseEntity delete(@PathVariable String username ){
+        userService.deleteUser(userService.findUser(username).get());
 
-        Optional<SiteUser> confirmationTest = userService.findUser(user);
+        Optional<SiteUser> confirmationTest = userService.findUser(username);
         if(confirmationTest.isPresent()){
             return ResponseEntity.notFound().build();
         }else{

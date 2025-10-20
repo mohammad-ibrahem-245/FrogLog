@@ -69,8 +69,8 @@ public class ProjectController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/project")
-    public ResponseEntity<List<Project>> getProjectByOwnerOrMember(@RequestParam String name){
+    @GetMapping("/userprojects/{name}")
+    public ResponseEntity<List<Project>> getProjectByOwnerOrMember(@PathVariable String name){
         projectService.getProjectsByOwnerOrMember(name);
         return ResponseEntity.ok().body(projectService.getProjectsByOwnerOrMember(name));
     }

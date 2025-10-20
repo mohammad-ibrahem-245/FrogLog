@@ -28,9 +28,9 @@ public class TaskController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity deleteTask(@RequestBody Task rask){
-        taskService.deleteTask(rask);
+    @DeleteMapping("/delete/{task}")
+    public ResponseEntity deleteTask(@PathVariable Task task){
+        taskService.deleteTask(task);
         return ResponseEntity.ok().build();
 
     }
