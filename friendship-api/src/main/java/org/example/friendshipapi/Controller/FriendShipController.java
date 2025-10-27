@@ -1,7 +1,7 @@
 package org.example.friendshipapi.Controller;
 
 
-import org.example.friendshipapi.FeinClients.UserClient;
+
 import org.example.friendshipapi.Models.DeleteRequest;
 import org.example.friendshipapi.Models.FriendshipRequest;
 import org.example.friendshipapi.Models.Request;
@@ -23,8 +23,6 @@ public class FriendShipController {
     FriendshipRequestService friendshipRequestService;
     @Autowired
     private FriendshipService friendshipService;
-    @Autowired
-    UserClient userClient;
 
 
     @PostMapping("/Add")

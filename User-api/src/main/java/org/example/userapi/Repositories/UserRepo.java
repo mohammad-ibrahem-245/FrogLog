@@ -16,6 +16,8 @@ public interface UserRepo extends JpaRepository<SiteUser,Long> {
     @Query(value = "SELECT * FROM site_user ORDER BY RANDOM() LIMIT 6", nativeQuery = true)
     Optional<List<SiteUser>> findRandomUser();
 
+    boolean existsByUserid(String userid);
+
 
 
 
