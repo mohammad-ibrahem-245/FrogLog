@@ -1,6 +1,8 @@
 package org.example.userapi.Services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import org.example.userapi.Dto.ProjectLeave;
+import org.example.userapi.FeignClients.ProjectClient;
 import org.example.userapi.Model.SiteUser;
 import org.example.userapi.Repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class UserService {
 
 
+    @Autowired
+    ProjectClient projectClient;
     @Autowired
     UserRepo userRepo;
     @Autowired
@@ -86,6 +90,15 @@ public class UserService {
         }
         return false;
 
+    }
+
+    ///leaving a specific project
+    public boolean leaveproject(ProjectLeave projectLeave){
+        if (checkUserExists(projectLeave.getUSER_ID())) {
+            projectClient.delMember(projectLeave);
+            return true;
+        }
+        return false;
     }
 
 

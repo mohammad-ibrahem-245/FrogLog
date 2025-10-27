@@ -1,7 +1,7 @@
 package org.example.projectapi.Controller;
 
 
-import org.example.projectapi.DTO.MembersRequests;
+import org.example.projectapi.DTO.ProjectLeave;
 import org.example.projectapi.Model.Project;
 import org.example.projectapi.Services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +53,8 @@ public class ProjectController {
     }
 
     @PutMapping("/addMember")
-    public ResponseEntity addMember(@RequestBody MembersRequests membersRequests){
-        if(projectService.addMemberToProject(membersRequests)){
+    public ResponseEntity addMember(@RequestBody ProjectLeave projectLeave){
+        if(projectService.addMemberToProject(projectLeave)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -62,8 +62,8 @@ public class ProjectController {
 
 
     @PutMapping("/delMember")
-    public ResponseEntity delMember(@RequestBody MembersRequests membersRequests){
-        if(projectService.deleteMemberFromProject(membersRequests)){
+    public ResponseEntity delMember(@RequestBody ProjectLeave projectLeave){
+        if(projectService.deleteMemberFromProject(projectLeave)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -74,6 +74,8 @@ public class ProjectController {
         projectService.getProjectsByOwnerOrMember(name);
         return ResponseEntity.ok().body(projectService.getProjectsByOwnerOrMember(name));
     }
+
+
 
 
 

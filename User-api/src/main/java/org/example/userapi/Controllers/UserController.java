@@ -1,5 +1,6 @@
 package org.example.userapi.Controllers;
 
+import org.example.userapi.Dto.ProjectLeave;
 import org.example.userapi.Model.SiteUser;
 import org.example.userapi.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,15 @@ public class UserController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
+    }
 
 
+    @PostMapping("/leave")
+    public ResponseEntity leave(@RequestBody ProjectLeave projectLeave){
+        if(userService.leaveproject(projectLeave)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 
