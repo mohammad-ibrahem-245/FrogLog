@@ -1,4 +1,7 @@
 .DS_Store
 .idea/
 **/application.properties
+<<<<<<< HEAD
+=======
 
+>>>>>>> 06e09c3 (Add application.properties to gitignore)

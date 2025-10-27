@@ -1,5 +1,6 @@
 package org.example.userapi.Controllers;
 
+import org.example.userapi.Dto.ProjectLeave;
 import org.example.userapi.Model.SiteUser;
 import org.example.userapi.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/User")
 public class UserController {
 
     @Autowired
@@ -18,7 +18,7 @@ public class UserController {
 
 
 
-    @GetMapping("/Search/{username}")
+    @GetMapping("/search/{username}")
     public ResponseEntity<SiteUser> search(@PathVariable String username){
        Optional<SiteUser> user = userService.findUser(username);
         if(user.isPresent()){
@@ -36,37 +36,41 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/add")
-    public ResponseEntity save(@RequestBody SiteUser user) throws InterruptedException {
-        userService.saveUser(user);
+    @PostMapping("/signup")
+    public ResponseEntity save(@RequestBody SiteUser user) {
 
-        Optional<SiteUser> confirmationTest = userService.findUser(user.getUserid());
-        if(confirmationTest.isPresent()){
+        if (userService.saveUser(user)) {
             return ResponseEntity.ok().build();
-        }else{
-        return ResponseEntity.notFound().build();
+        }else  {
+            return ResponseEntity.badRequest().build();
         }
+
     }
 
 
     @PostMapping("/update/")
     public ResponseEntity update(@RequestBody SiteUser user){
-        userService.updateUser(user);
-        return ResponseEntity.ok().build();
+        if (userService.updateUser(user)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/deleteMyAccount/{username}")
     public ResponseEntity delete(@PathVariable String username ){
-        userService.deleteUser(userService.findUser(username).get());
-
-        Optional<SiteUser> confirmationTest = userService.findUser(username);
-        if(confirmationTest.isPresent()){
-            return ResponseEntity.notFound().build();
-        }else{
+        if (userService.deleteUser(username)){
             return ResponseEntity.ok().build();
         }
+        return ResponseEntity.badRequest().build();
+    }
 
 
+    @PostMapping("/leave")
+    public ResponseEntity leave(@RequestBody ProjectLeave projectLeave){
+        if(userService.leaveproject(projectLeave)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 

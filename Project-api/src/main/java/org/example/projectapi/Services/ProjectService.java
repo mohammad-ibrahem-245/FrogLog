@@ -1,11 +1,10 @@
 package org.example.projectapi.Services;
 
-import org.example.projectapi.DTO.MembersRequests;
+import org.example.projectapi.DTO.ProjectLeave;
 import org.example.projectapi.Model.Project;
 import org.example.projectapi.Repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -63,10 +62,10 @@ public class ProjectService {
         return null;
     }
 
-    public boolean addMemberToProject(MembersRequests membersRequests){
-        if (checkIfProjectExists(membersRequests.getProjectName())) {
-            Project project = getProjectByName(membersRequests.getProjectName());
-            project.getMembers().add(membersRequests.getMemberId());
+    public boolean addMemberToProject(ProjectLeave projectLeave){
+        if (checkIfProjectExists(projectLeave.getProjectName())) {
+            Project project = getProjectByName(projectLeave.getProjectName());
+            project.getMembers().add(projectLeave.getMemberId());
             projectRepository.save(project);
             return true;
         }
@@ -74,10 +73,10 @@ public class ProjectService {
 
     }
 
-    public boolean deleteMemberFromProject(MembersRequests membersRequests){
-        if (checkIfProjectExists(membersRequests.getProjectName())) {
-            Project project = getProjectByName(membersRequests.getProjectName());
-            project.getMembers().remove(membersRequests.getMemberId());
+    public boolean deleteMemberFromProject(ProjectLeave projectLeave){
+        if (checkIfProjectExists(projectLeave.getProjectName())) {
+            Project project = getProjectByName(projectLeave.getProjectName());
+            project.getMembers().remove(projectLeave.getMemberId());
             projectRepository.save(project);
             return true;
         }
