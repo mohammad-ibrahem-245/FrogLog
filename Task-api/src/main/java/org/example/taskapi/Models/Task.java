@@ -23,18 +23,15 @@ public class Task {
     private String title;
     @Column(nullable = false)
     private String projectName;
-    @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
     private TaskStatus status;
+    @Column(nullable = false)
     private Priority priority;
     @Column(nullable = false)
     private LocalDateTime dueDate;
     @Column(nullable = false)
     private String assignee;
-    @Column(nullable = false)
     private LocalDateTime createdDate;
-    @Column(nullable = false)
     private boolean edited ;
 
 }

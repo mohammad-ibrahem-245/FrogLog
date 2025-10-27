@@ -18,6 +18,10 @@ public class TaskService {
     @Autowired
     TaskRepository taskRepository;
 
+
+
+
+    /// creating a task
     public void createTask(Task task) {
         task.setStatus(TaskStatus.TODO);
         task.setCreatedDate(LocalDateTime.now());
@@ -25,14 +29,33 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void editTask(Task task) {
-        taskRepository.save(task);
+
+    /// editing existent task
+    public boolean editTask(Task task) {
+        if (checkExists(task)) {
+            task.setEdited(true);
+            taskRepository.save(task);
+            return true;
+        }
+        return false;
     }
 
-    public void deleteTask(Task task){
-        taskRepository.delete(task);
+
+    /// deleting Existent task
+    public boolean deleteTask(Task task){
+        if (checkExists(task)) {
+            taskRepository.delete(task);
+            if (checkExists(task)){
+            return true;}
+
+        }
+        return false;
+
     }
-    
+
+
+
+    /// searching for task depending on project or user
     public List<Task> searchTasks(SearchBy searchBy){
         if (searchBy.getField() == SearchBy.SearchByField.PROJECT) {
             Optional<List<Task>> tasks = Optional.ofNullable(taskRepository.findByProjectId(searchBy.getValue()));
@@ -47,6 +70,14 @@ public class TaskService {
             }else return null;
         }
         return null;
+    }
+
+
+
+
+    /// checks if task exist
+    public boolean checkExists(Task task){
+        return taskRepository.existsById(task.getId());
     }
 
 
