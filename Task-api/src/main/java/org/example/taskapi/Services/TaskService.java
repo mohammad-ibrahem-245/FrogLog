@@ -6,6 +6,7 @@ import org.example.taskapi.Enums.TaskStatus;
 import org.example.taskapi.Models.Task;
 import org.example.taskapi.Repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -72,6 +73,27 @@ public class TaskService {
         return null;
     }
 
+
+
+    /// query gets fired every 60 seconds to set task as overdue
+    @Scheduled(fixedRate = 60000)
+    public void markOverdueTasks() {
+        List<Task> allTasks = taskRepository.findAll();  // O(n)
+
+        LocalDateTime now = LocalDateTime.now();
+        int updatedCount = 0;
+
+        for (Task task : allTasks) {                     // O(n)
+            if (task.getDueDate() != null
+                    && task.getDueDate().isBefore(now)
+                    && task.getStatus() != TaskStatus.OVERDUE) {
+
+                task.setStatus(TaskStatus.OVERDUE);
+                taskRepository.save(task);                // O(1) per update
+                updatedCount++;
+            }
+        }
+    }
 
 
 
