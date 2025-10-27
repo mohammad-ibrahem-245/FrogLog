@@ -1,5 +1,6 @@
 package org.example.userapi.Services;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.example.userapi.Model.SiteUser;
 import org.example.userapi.Repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,13 @@ public class UserService {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    private final BCrypt.Hasher passwordHasher;
+
+    public UserService(BCrypt.Hasher passwordHasher) {
+        this.passwordHasher = passwordHasher;
+    }
+
     public Optional<SiteUser> findUser(String username) {
         Optional<SiteUser> user = Optional.ofNullable(userRepo.findByUserid(username));
         return user;
@@ -25,6 +33,7 @@ public class UserService {
     }
 
     public void saveUser(SiteUser user){
+        user.setPassword(passwordHasher.hashToString(12, user.getPassword().toCharArray()));
         user.setCreated(Date.from(new Date().toInstant()));
         userRepo.save(user);
     }
