@@ -4,6 +4,7 @@ import org.example.gateway.Security.JwtUtil;
 import org.example.gateway.Models.LoginRequest;
 import org.example.gateway.Models.SiteUser;
 import org.example.gateway.Feign.UserClient;
+import org.example.gateway.Service.GatewayService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,11 +24,13 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final UserClient userClient;
     private final PasswordEncoder passwordEncoder;
+    private final GatewayService gatewayService;
 
-    public AuthController(JwtUtil jwtUtil, UserClient userClient, PasswordEncoder passwordEncoder) {
+    public AuthController(JwtUtil jwtUtil, UserClient userClient, PasswordEncoder passwordEncoder, GatewayService gatewayService) {
         this.jwtUtil = jwtUtil;
         this.userClient = userClient;
         this.passwordEncoder = passwordEncoder;
+        this.gatewayService = gatewayService;
     }
 
     @PostMapping("/login")
@@ -48,4 +51,11 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("token", token));
         }).subscribeOn(Schedulers.boundedElastic());
     }
+
+    @PostMapping("/signup")
+    public Mono<ResponseEntity<String>> signup(@RequestBody SiteUser siteUser){
+        return gatewayService.signup(siteUser);
+
+    }
+
 }
