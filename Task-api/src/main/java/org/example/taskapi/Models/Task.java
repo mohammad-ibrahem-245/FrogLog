@@ -23,6 +23,8 @@ public class Task {
     private String title;
     @Column(nullable = false)
     private String projectName;
+    @Column(nullable = false)
+    private String owner;
     private String description;
     private TaskStatus status;
     @Column(nullable = false)
