@@ -24,16 +24,16 @@ public class FriendShipController {
     private FriendshipService friendshipService;
 
 
-    @PostMapping("/Add")
-    public ResponseEntity addFriend(@RequestBody Request request){
-        friendshipRequestService.addFriendship(request);
+    @PostMapping("/add")
+    public ResponseEntity addFriend(@RequestBody Request request ,  @RequestHeader("X-User-Name") String username){
+        friendshipRequestService.addFriendship(request, username);
 
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping("/FriendshipsRequests/{username}")
-    public ResponseEntity<List<FriendshipRequest>> FriendshipsRequest(@PathVariable String username){
-        Optional<List<FriendshipRequest>> requestList=  friendshipRequestService.friendshipRequestList(username);
+    @GetMapping("/friendshipsrequests/{username}")
+    public ResponseEntity<List<FriendshipRequest>> FriendshipsRequest(@PathVariable String username ,  @RequestHeader("X-User-Name") String user){
+        Optional<List<FriendshipRequest>> requestList=  friendshipRequestService.friendshipRequestList(username , user);
         if(requestList.isPresent()){
             return ResponseEntity.ok(requestList.get());
         }else{
@@ -43,9 +43,9 @@ public class FriendShipController {
 
 
 
-    @PostMapping("/Answer")
-    public ResponseEntity FriendsshipAnswer(@RequestBody RequestAnswer requestAnswer){
-        friendshipRequestService.FriendshipAnswer(requestAnswer);
+    @PutMapping("/answer")
+    public ResponseEntity FriendsshipAnswer(@RequestBody RequestAnswer requestAnswer ,  @RequestHeader("X-User-Name") String user ){
+        friendshipRequestService.FriendshipAnswer(requestAnswer , user);
         return ResponseEntity.ok("ok");
 
     }
@@ -53,23 +53,23 @@ public class FriendShipController {
 
 
 
-    @GetMapping("/allFriends/{username}")
-    public ResponseEntity<List<String>> seacrhFriend(@PathVariable String username){
-        return ResponseEntity.ok(friendshipService.getFriends(username));
+    @GetMapping("/allfriends/{username}")
+    public ResponseEntity<List<String>> seacrhFriend(@PathVariable String username ,  @RequestHeader("X-User-Name") String user){
+        return ResponseEntity.ok(friendshipService.getFriends(username , user));
 
 
 
     }
 
-    @DeleteMapping("/deleteFriend")
-    public ResponseEntity deleteFriend(@RequestBody DeleteRequest deleteRequest){
-        friendshipService.deleteFriendship(deleteRequest);
+    @DeleteMapping("/deletefriend")
+    public ResponseEntity deleteFriend(@RequestBody DeleteRequest deleteRequest , @RequestHeader("X-User-Name") String user){
+        friendshipService.deleteFriendship(deleteRequest,user);
         return ResponseEntity.ok("ok");
     }
 
     @GetMapping("/search")
-    public ResponseEntity<String> searchFriends(@RequestBody Request request){
-        return ResponseEntity.ok(friendshipService.searchforAFriend(request));
+    public ResponseEntity<String> searchFriends(@RequestBody Request request , @RequestHeader("X-User-Name") String user){
+        return ResponseEntity.ok(friendshipService.searchforAFriend(request,user));
 
 
     }
