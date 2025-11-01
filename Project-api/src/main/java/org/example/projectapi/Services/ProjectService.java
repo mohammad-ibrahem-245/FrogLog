@@ -32,17 +32,20 @@ public class ProjectService {
 
     }
 
-    public boolean deleteProject(String name){
+    public boolean deleteProject(String name , String username){
         if(checkIfProjectExists(name)){
-            projectRepository.delete(findProjectByName(name));
-            return true;
+            Project project = findProjectByName(name);
+            if (project.getOwner().equals(username)) {
+                projectRepository.delete(project);
+                return true;
+            }
         }
 
         return false;
     }
 
-    public boolean editProject(Project project ,String name){
-        if (checkIfProjectExists(name)){
+    public boolean editProject(Project project ,String name , String username){
+        if (checkIfProjectExists(name) && project.getOwner().equals(username)) {
             Project projectval = getProjectByName(name);
             projectval.setName(project.getName());
             projectval.setDescription(project.getDescription());
@@ -62,23 +65,27 @@ public class ProjectService {
         return null;
     }
 
-    public boolean addMemberToProject(ProjectLeave projectLeave){
+    public boolean addMemberToProject(ProjectLeave projectLeave , String username ){
         if (checkIfProjectExists(projectLeave.getProjectName())) {
             Project project = getProjectByName(projectLeave.getProjectName());
-            project.getMembers().add(projectLeave.getMemberId());
-            projectRepository.save(project);
-            return true;
+            if(project.getOwner() .equals(username)) {
+                project.getMembers().add(projectLeave.getMemberId());
+                projectRepository.save(project);
+                return true;
+            }
         }
         return false;
 
     }
 
-    public boolean deleteMemberFromProject(ProjectLeave projectLeave){
+    public boolean deleteMemberFromProject(ProjectLeave projectLeave , String username ){
         if (checkIfProjectExists(projectLeave.getProjectName())) {
             Project project = getProjectByName(projectLeave.getProjectName());
-            project.getMembers().remove(projectLeave.getMemberId());
-            projectRepository.save(project);
-            return true;
+            if(project.getOwner() .equals(username)) {
+                project.getMembers().remove(projectLeave.getMemberId());
+                projectRepository.save(project);
+                return true;
+            }
         }
         return false;
     }

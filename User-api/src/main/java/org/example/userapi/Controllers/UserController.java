@@ -48,17 +48,17 @@ public class UserController {
     }
 
 
-    @PostMapping("/update/")
-    public ResponseEntity update(@RequestBody SiteUser user){
-        if (userService.updateUser(user)) {
+    @PutMapping("/update")
+    public ResponseEntity update(@RequestBody SiteUser user , @RequestHeader("X-User-Name") String username){
+        if (userService.updateUser(user ,username)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/deleteMyAccount/{username}")
-    public ResponseEntity delete(@PathVariable String username ){
-        if (userService.deleteUser(username)){
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity delete(@PathVariable String username ,  @RequestHeader("X-User-Name") String user){
+        if (userService.deleteUser(username,user)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -66,8 +66,8 @@ public class UserController {
 
 
     @PostMapping("/leave")
-    public ResponseEntity leave(@RequestBody ProjectLeave projectLeave){
-        if(userService.leaveproject(projectLeave)){
+    public ResponseEntity leave(@RequestBody ProjectLeave projectLeave ,  @RequestHeader("X-User-Name") String username){
+        if(userService.leaveproject(projectLeave,username)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();

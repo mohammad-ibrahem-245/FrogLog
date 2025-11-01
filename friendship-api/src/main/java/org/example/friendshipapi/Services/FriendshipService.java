@@ -24,26 +24,34 @@ public class FriendshipService {
 
     }
 
-    public void deleteFriendship(DeleteRequest deleteRequest){
-        friendshipRepository.deleteFriendship(deleteRequest.getSiteUser(), deleteRequest.getFriend());
-        friendshipRepository.deleteFriendship(deleteRequest.getFriend(), deleteRequest.getSiteUser());
-
-    }
-
-    public List<String> getFriends(String siteUser){
-        Optional<List<String> >friendList = Optional.ofNullable(friendshipRepository.findFriendbySiteuser(siteUser));
-
-        return friendList.orElseGet(ArrayList::new);
-
-
-    }
-
-    public String searchforAFriend(Request request){
-        Optional<String> friend = Optional.ofNullable(friendshipRepository.findFriend(request.getSender() , request.getReceiver()));
-        if(friend.isPresent()){
-            return friend.get();
-        }else{
-            return null;
+    public void deleteFriendship(DeleteRequest deleteRequest , String user){
+        if (deleteRequest.getSiteUser().equals(user)) {
+            friendshipRepository.deleteFriendship(deleteRequest.getSiteUser(), deleteRequest.getFriend());
+            friendshipRepository.deleteFriendship(deleteRequest.getFriend(), deleteRequest.getSiteUser());
         }
+
+    }
+
+    public List<String> getFriends(String siteUser , String user){
+        if (siteUser.equals(user)) {
+            Optional<List<String>> friendList = Optional.ofNullable(friendshipRepository.findFriendbySiteuser(siteUser));
+
+            return friendList.orElseGet(ArrayList::new);
+        }
+        return null;
+
+
+    }
+
+    public String searchforAFriend(Request request , String user){
+        if(request.getSender().equals(user) || request.getReceiver().equals(user)) {
+            Optional<String> friend = Optional.ofNullable(friendshipRepository.findFriend(request.getSender(), request.getReceiver()));
+            if (friend.isPresent()) {
+                return friend.get();
+            } else {
+                return null;
+            }
+        }
+        return null;
     }
 }

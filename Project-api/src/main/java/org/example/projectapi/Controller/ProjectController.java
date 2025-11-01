@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/projects")
 public class ProjectController {
 
     @Autowired
@@ -27,8 +26,8 @@ public class ProjectController {
     }
 
     @DeleteMapping("/delete/{name}")
-    public ResponseEntity deleteProject(@PathVariable String name){
-        if(projectService.deleteProject(name)){
+    public ResponseEntity deleteProject(@PathVariable String name ,@RequestHeader("X-User-Name") String username){
+        if(projectService.deleteProject(name,username)){
         return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -36,8 +35,8 @@ public class ProjectController {
 
 
     @PutMapping("/edit/{name}")
-    public ResponseEntity editProject(@RequestBody Project project , @PathVariable String name){
-        if(projectService.editProject(project,name)){
+    public ResponseEntity editProject(@RequestBody Project project , @PathVariable String name , @RequestHeader("X-User-Name") String username){
+        if(projectService.editProject(project,name,username)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -52,25 +51,25 @@ public class ProjectController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/addMember")
-    public ResponseEntity addMember(@RequestBody ProjectLeave projectLeave){
-        if(projectService.addMemberToProject(projectLeave)){
+    @PutMapping("/addmember")
+    public ResponseEntity addMember(@RequestBody ProjectLeave projectLeave , @RequestHeader("X-User-Name") String username){
+        if(projectService.addMemberToProject(projectLeave,username)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
 
 
-    @PutMapping("/delMember")
-    public ResponseEntity delMember(@RequestBody ProjectLeave projectLeave){
-        if(projectService.deleteMemberFromProject(projectLeave)){
+    @PutMapping("/delmember")
+    public ResponseEntity delMember(@RequestBody ProjectLeave projectLeave , @RequestHeader("X-User-Name") String username){
+        if(projectService.deleteMemberFromProject(projectLeave,username)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/userprojects/{name}")
-    public ResponseEntity<List<Project>> getProjectByOwnerOrMember(@PathVariable String name){
+    public ResponseEntity<List<Project>> getProjectByOwnerOrMember(@PathVariable String name ){
         projectService.getProjectsByOwnerOrMember(name);
         return ResponseEntity.ok().body(projectService.getProjectsByOwnerOrMember(name));
     }

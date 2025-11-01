@@ -64,11 +64,13 @@ public class UserService {
 
 
 
-    /// deleting a user account
-    public boolean deleteUser(String user){
-        if (checkUserExists(user)) {
-            findUser(user).ifPresent(userRepo::delete);
-            return true;
+    /// deleting a username account
+    public boolean deleteUser(String username , String user){
+        if(username.equals(user)) {
+            if (checkUserExists(username)) {
+                findUser(username).ifPresent(userRepo::delete);
+                return true;
+            }
         }
         return false;
     }
@@ -76,27 +78,31 @@ public class UserService {
 
 
     /// updating user data
-    public boolean updateUser(SiteUser updatedUser){
-        if (checkUserExists(updatedUser.getUserid())) {
-            SiteUser oldUser = userRepo.findByUserid(updatedUser.getUserid());
-            oldUser.setName(updatedUser.getName());
-            oldUser.setBio(updatedUser.getBio());
-            oldUser.setPassword(updatedUser.getPassword());
-            oldUser.setImage(updatedUser.getImage());
-            oldUser.setCareer(updatedUser.getCareer());
-            oldUser.setDateOfBirth(updatedUser.getDateOfBirth());
-            userRepo.save(oldUser);
-            return true;
+    public boolean updateUser(SiteUser updatedUser ,String username){
+        if(username.equals(updatedUser.getUserid())) {
+            if (checkUserExists(updatedUser.getUserid())) {
+                SiteUser oldUser = userRepo.findByUserid(updatedUser.getUserid());
+                oldUser.setName(updatedUser.getName());
+                oldUser.setBio(updatedUser.getBio());
+                oldUser.setPassword(updatedUser.getPassword());
+                oldUser.setImage(updatedUser.getImage());
+                oldUser.setCareer(updatedUser.getCareer());
+                oldUser.setDateOfBirth(updatedUser.getDateOfBirth());
+                userRepo.save(oldUser);
+                return true;
+            }
         }
         return false;
 
     }
 
     ///leaving a specific project
-    public boolean leaveproject(ProjectLeave projectLeave){
-        if (checkUserExists(projectLeave.getUSER_ID())) {
-            projectClient.delMember(projectLeave);
-            return true;
+    public boolean leaveproject(ProjectLeave projectLeave ,String  username){
+        if(projectLeave.getUSER_ID().equals(username)) {
+            if (checkUserExists(projectLeave.getUSER_ID())) {
+                projectClient.delMember(projectLeave);
+                return true;
+            }
         }
         return false;
     }
