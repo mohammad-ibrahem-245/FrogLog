@@ -16,31 +16,31 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping("/create")
-    public ResponseEntity createTask(@RequestBody Task task) {
-        taskService.createTask(task);
+    public ResponseEntity createTask(@RequestBody Task task ,  @RequestHeader("X-User-Name") String username) {
+        taskService.createTask(task , username);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/edit")
-    public ResponseEntity editTask(@RequestBody Task task) {
-       if( taskService.editTask(task)) {
+    public ResponseEntity editTask(@RequestBody Task task , @RequestHeader("X-User-Name") String username) {
+       if( taskService.editTask(task , username)) {
            return ResponseEntity.ok().build();
        }
        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/delete/{task}")
-    public ResponseEntity deleteTask(@PathVariable Task task){
-        if(taskService.deleteTask(task)) {
+    public ResponseEntity deleteTask(@PathVariable Long task , @RequestHeader("X-User-Name") String username) {
+        if(taskService.deleteTask(task , username)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
 
     }
 
-    @GetMapping("/getTasks")
-    public ResponseEntity<List<Task>> getTasks(@RequestBody SearchBy searchBy){
-       return ResponseEntity.ok(taskService.searchTasks(searchBy));
+    @GetMapping("/gettasks")
+    public ResponseEntity<List<Task>> getTasks(@RequestBody SearchBy searchBy ,  @RequestHeader("X-User-Name") String username) {
+       return ResponseEntity.ok(taskService.searchTasks(searchBy , username));
     }
 
 

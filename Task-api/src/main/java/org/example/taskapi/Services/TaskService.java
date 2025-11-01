@@ -5,9 +5,11 @@ import org.example.taskapi.Dto.SearchBy;
 import org.example.taskapi.Enums.TaskStatus;
 import org.example.taskapi.Models.Task;
 import org.example.taskapi.Repositories.TaskRepository;
+import org.example.taskapi.feign.ProjectClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,36 +21,51 @@ public class TaskService {
     @Autowired
     TaskRepository taskRepository;
 
+    @Autowired
+    ProjectClient projectClient;
+
 
 
 
     /// creating a task
-    public void createTask(Task task) {
-        task.setStatus(TaskStatus.TODO);
-        task.setCreatedDate(LocalDateTime.now());
-        task.setEdited(false);
-        taskRepository.save(task);
+    public void createTask(Task task , String username) {
+        String owner = projectClient.getProject(task.getProjectName()).getOwner();
+        if (owner.equals(username)) {
+            task.setOwner(owner);
+            task.setStatus(TaskStatus.TODO);
+            task.setCreatedDate(LocalDateTime.now());
+            task.setEdited(false);
+            taskRepository.save(task);
+        }
     }
 
 
     /// editing existent task
-    public boolean editTask(Task task) {
-        if (checkExists(task)) {
-            task.setEdited(true);
-            taskRepository.save(task);
-            return true;
+    public boolean editTask(Task task , String username) {
+        String owner = projectClient.getProject(task.getProjectName()).getOwner();
+        if (owner.equals(username)) {
+            if (checkExists(task)) {
+                task.setEdited(true);
+                taskRepository.save(task);
+                return true;
+            }
         }
         return false;
     }
 
 
     /// deleting Existent task
-    public boolean deleteTask(Task task){
-        if (checkExists(task)) {
-            taskRepository.delete(task);
-            if (checkExists(task)){
-            return true;}
+    public boolean deleteTask(Long id , String username) {
+        Task task = taskRepository.findById(id).get();
+        String owner = projectClient.getProject(task.getProjectName()).getOwner();
+        if (owner.equals(username)) {
+            if (taskRepository.existsById(task.getId())) {
+                taskRepository.delete(task);
+                if (!checkExists(task)) {
+                    return true;
+                }
 
+            }
         }
         return false;
 
@@ -57,7 +74,8 @@ public class TaskService {
 
 
     /// searching for task depending on project or user
-    public List<Task> searchTasks(SearchBy searchBy){
+    public List<Task> searchTasks(SearchBy searchBy , String username) {
+
         if (searchBy.getField() == SearchBy.SearchByField.PROJECT) {
             Optional<List<Task>> tasks = Optional.ofNullable(taskRepository.findByProjectId(searchBy.getValue()));
             if (tasks.isPresent()) {

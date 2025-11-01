@@ -24,7 +24,6 @@ public class Project {
     private String description;
     @ElementCollection
     private List<String> members;
-    private List<Long> tasks;
     private LocalDate createdDate;
     @Column(nullable = false)
     private String owner;
