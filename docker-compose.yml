@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  eureka:
+    build: ./Eureka server
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - froglog-net
+
+  gateway:
+    build: ./Gateway
+    container_name: gateway
+    depends_on:
+      - eureka
+      - user-api
+      - project-api
+      - task-api
+      - friendship-api
+    ports:
+      - "8765:8765"
+    networks:
+      - froglog-net
+
+  user-api:
+    build: ./User-api
+    container_name: user-api
+    depends_on:
+      - eureka
+
+    networks:
+      - froglog-net
+
+  project-api:
+    build: ./Project-api
+    container_name: project-api
+    depends_on:
+      - eureka
+
+    networks:
+      - froglog-net
+
+  task-api:
+    build: ./Task-api
+    container_name: task-api
+    depends_on:
+      - eureka
+
+    networks:
+      - froglog-net
+
+  friendship-api:
+    build: ./friendship-api
+    container_name: friendship-api
+    depends_on:
+      - eureka
+    networks:
+      - froglog-net
+
+networks:
+  froglog-net:
+    driver: bridge
