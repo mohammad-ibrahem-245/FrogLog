@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class GatewayService {
 
-    private final WebClient webClient = WebClient.create("http://localhost:8080");
+    private final WebClient webClient = WebClient.create("http://user-api:8080");
 
     public Mono<ResponseEntity<String>> signup(SiteUser siteUser) {
         return webClient.post()
