@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "PROJECT-API")
 public interface ProjectClient {
 
-    @PutMapping("/delMember")
+    @PutMapping("/delmember")
     public ResponseEntity delMember(@RequestBody ProjectLeave membersRequests);
 }
