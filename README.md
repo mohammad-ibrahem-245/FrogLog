@@ -92,7 +92,7 @@ Based on code references and repository composition:
 Typical Spring configuration values (adjust per service):
 
 ```
-server.port=8081
+server.port=8080
 spring.application.name=user-api
 spring.jpa.hibernate.ddl-auto=update
 spring.datasource.url=jdbc:postgresql://localhost:5432/froglog_user
